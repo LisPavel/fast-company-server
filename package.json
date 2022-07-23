@@ -1,11 +1,21 @@
 {
-  "name": "fast-company-server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "fast-company-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "config": "^3.3.7",
+        "express": "^4.18.1",
+        "mongoose": "^6.4.6"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.13",
+        "@types/node": "^18.0.6"
+    }
 }
