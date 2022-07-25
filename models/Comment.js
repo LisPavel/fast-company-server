@@ -5,10 +5,12 @@ const schema = new Schema(
         content: String,
         pageId: {
             type: Schema.Types.ObjectId,
+            ref: "User",
             required: true,
         },
         userId: {
             type: Schema.Types.ObjectId,
+            ref: "User",
             required: true,
         },
     },
