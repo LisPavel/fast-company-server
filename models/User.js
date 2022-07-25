@@ -32,4 +32,4 @@ const schema = new Schema(
     { timestamps: true }
 );
 
-module.exports = model("Quality", schema);
+module.exports = model("User", schema);
