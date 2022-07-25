@@ -16,6 +16,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.listen(PORT, () => {
-    console.log(chalk.green(`Server has been started on ${PORT} port`));
-});
+async function start(params) {
+    try {
+        await mongoose.connect(config.get("mongoDbUri"));
+        console.log(chalk.green("MDB connected"));
+        app.listen(PORT, () => {
+            console.log(chalk.green(`Server has been started on ${PORT} port`));
+        });
+    } catch (error) {
+        console.log(chalk.red(error.message));
+        process.exit(1);
+    }
+}
+
+start();
