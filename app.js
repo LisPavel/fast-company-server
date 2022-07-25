@@ -3,6 +3,8 @@ const chalk = require("chalk");
 const mongoose = require("mongoose");
 const config = require("config");
 
+const initDatabase = require("./startUp/initDatabase");
+
 const PORT = config.get("port") ?? 8080;
 
 // if (process.env.NODE_ENV === "production") {
@@ -18,6 +20,9 @@ app.use(express.urlencoded({ extended: false }));
 
 async function start(params) {
     try {
+        mongoose.connection.once("open", () => {
+            initDatabase();
+        });
         await mongoose.connect(config.get("mongoDbUri"));
         console.log(chalk.green("MDB connected"));
         app.listen(PORT, () => {
