@@ -25,6 +25,26 @@ class TokenService {
 
         return token;
     }
+
+    validate(refreshToken) {
+        try {
+            const data = jwt.verify(refreshToken, config.get("refreshSecret"));
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+    async findToken(refreshToken) {
+        try {
+            const data = await Token.findOne({ refreshToken });
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
 }
 
 module.exports = new TokenService();
