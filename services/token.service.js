@@ -26,9 +26,19 @@ class TokenService {
         return token;
     }
 
-    validate(refreshToken) {
+    validateRefresh(refreshToken) {
         try {
             const data = jwt.verify(refreshToken, config.get("refreshSecret"));
+            return data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+    validateAccess(accessToken) {
+        try {
+            const data = jwt.verify(accessToken, config.get("accessSecret"));
             return data;
         } catch (error) {
             console.log(error);
