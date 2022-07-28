@@ -57,7 +57,66 @@ router.post("/signUp", [
     },
 ]);
 
-router.post("/signInWithPassword", async (req, res) => {});
+router.post("/signInWithPassword", [
+    check("email")
+        .normalizeEmail()
+        .isEmail()
+        .withMessage("Invalid email format"),
+    check("password").exists().withMessage("Password required"),
+    async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                console.log(errors);
+                return res.status(400).json({
+                    error: {
+                        message: "INVALID_DATA",
+                        code: 400,
+                    },
+                });
+            }
+
+            const { email, password } = req.body;
+
+            const existingUser = await User.findOne({ email });
+            if (!existingUser) {
+                return res.status(400).json({
+                    error: {
+                        message: "EMAIL_NOT_FOUND",
+                        code: 400,
+                    },
+                });
+            }
+
+            const isPasswordsEqual = await bcrypt.compare(
+                password,
+                existingUser.password
+            );
+
+            if (!isPasswordsEqual) {
+                return res.status(400).json({
+                    error: {
+                        message: "INVALID_PASSWORD",
+                        code: 400,
+                    },
+                });
+            }
+
+            const tokens = tokenService.generate({ _id: existingUser._id });
+
+            await tokenService.save(existingUser._id, tokens.refreshToken);
+
+            res.status(200).json({
+                ...tokens,
+                userId: existingUser._id,
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Error on server. Try again later.",
+            });
+        }
+    },
+]);
 
 router.post("/token", async (req, res) => {});
 
